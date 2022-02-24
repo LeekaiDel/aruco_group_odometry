@@ -1,0 +1,6 @@
+<launch>
+    <include file="$(find ros_camera)/launch/mono_cam.launch"/>
+    <include file="$(find ros_camera)/launch/image_proc_simple.launch"/>
+    <include file="$(find aruco_group_finder)/launch/double.launch"/>
+</launch>
+
