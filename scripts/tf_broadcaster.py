@@ -11,6 +11,7 @@ class TfBroadcaster():
         self.list_child_names = list()
         self.br = tf.TransformBroadcaster()
         self.listener = tf.TransformListener()
+        self.use_z = False
         rospy.Subscriber("/aruco_simple/markers", MarkerArray, self.tf_parser_cb)
 
 
@@ -27,7 +28,10 @@ class TfBroadcaster():
         if self.list_child_names:
             for marker_name in self.list_child_names:
                 try:
-                    (pos, rot) = self.listener.lookupTransform(marker_name, self.origin_marker_name, rospy.Time(0))
+
+                    (pos, rot) = self.listener.lookupTransform(self.origin_marker_name, marker_name, rospy.Time(0))
+                    if not self.use_z:
+                        pos[-1] = 0.0
                     self.br.sendTransform(pos, rot, rospy.Time.now(), "transform_" + marker_name, self.origin_name)
                 except:
                     pass
